@@ -5,9 +5,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
 
-@Entity()
+import { Task } from 'src/task/entities/task.entity';
+
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -47,4 +50,7 @@ export class User {
 
   @DeleteDateColumn()
   deleted_at: Date; // Deletion date
+
+  @OneToMany(() => Task, (task) => task.user)
+  tasks: Task[];
 }

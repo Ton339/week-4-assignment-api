@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -8,9 +9,23 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-  app.setGlobalPrefix('api');
+
+  // เปลี่ยนบรรทัดที่ 13
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true, // ช่วยในการแปลง Type อัตโนมัติได้ดีขึ้น
+      },
+    }),
+  );
+
+  const prefix = 'api';
+  app.setGlobalPrefix(prefix);
   await app.listen(process.env.PORT || 3001);
-  console.log(`Application is running on: ${process.env.PORT}`);
-  console.log(`Server URL: ${await app.getUrl()}`);
+  console.log(`Application is running on port: ${process.env.PORT}`);
+  console.log(`Server URL: /${prefix}`);
 }
 bootstrap();

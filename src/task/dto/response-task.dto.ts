@@ -1,9 +1,11 @@
-export class ResponeTaskDto {
+import { User } from 'src/user/entities/user.entity';
+
+export class ResponseTaskDto {
   id: number;
   title: string;
   status: string;
   priority: string;
-  userId: number;
+  user: User;
 }
 
 export class PaginatedTaskResponseDto {
@@ -13,5 +15,5 @@ export class PaginatedTaskResponseDto {
   last: number;
   pages: number;
   items: number;
-  data: ResponeTaskDto[];
+  data: ResponseTaskDto[];
 }

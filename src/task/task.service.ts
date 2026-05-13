@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { ResponeTaskDto } from './dto/respone-task.dto';
+import {
+  PaginatedTaskResponseDto,
+  ResponseTaskDto,
+} from './dto/response-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -13,19 +16,27 @@ export class TaskService {
     private readonly taskRepository: Repository<Task>,
   ) {}
 
-  async create(createTaskDto: CreateTaskDto): Promise<ResponeTaskDto> {
+  async create(createTaskDto: CreateTaskDto): Promise<ResponseTaskDto> {
     return await this.taskRepository.save(createTaskDto);
   }
 
-  async findAll(page: number = 1, limit: number = 10): Promise<any> {
+  async findAll(
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<PaginatedTaskResponseDto> {
     const skip = (page - 1) * limit;
-    const [data, total] = await this.taskRepository.findAndCount({
-      skip,
-      take: limit,
-      order: {
-        id: 'ASC',
-      },
-    });
+
+    // ใช้ QueryBuilder แทน เพื่อเลือกระบุเฉพาะฟิลด์ของ User ที่ต้องการ
+    const [data, total] = await this.taskRepository
+      .createQueryBuilder('task')
+      // leftJoin(ชื่อ relation ใน entity, alias name)
+      .leftJoin('task.user', 'user')
+      // เลือกเฉพาะ id, name, avatar ของ user (ฟิลด์ของ task จะมาครบโดยอัตโนมัติ)
+      .addSelect(['user.id', 'user.name', 'user.avatar'])
+      .orderBy('task.id', 'ASC')
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
 
     const totalPages = Math.ceil(total / limit);
 
@@ -40,7 +51,7 @@ export class TaskService {
     };
   }
 
-  async findOne(id: number): Promise<ResponeTaskDto | null> {
+  async findOne(id: number): Promise<ResponseTaskDto | null> {
     return await this.taskRepository.findOneBy({ id });
   }
 

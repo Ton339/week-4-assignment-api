@@ -14,8 +14,8 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { PaginationTaskDto } from './dto/pagination-task.dto';
 import {
   PaginatedTaskResponseDto,
-  ResponeTaskDto,
-} from './dto/respone-task.dto';
+  ResponseTaskDto,
+} from './dto/response-task.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { Query } from '@nestjs/common';
 
@@ -24,7 +24,7 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto): Promise<ResponeTaskDto> {
+  create(@Body() createTaskDto: CreateTaskDto): Promise<ResponseTaskDto> {
     return this.taskService.create(createTaskDto);
   }
 
@@ -38,7 +38,7 @@ export class TaskController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<ResponeTaskDto | null> {
+  findOne(@Param('id') id: string): Promise<ResponseTaskDto | null> {
     return this.taskService.findOne(parseInt(id));
   }
 
