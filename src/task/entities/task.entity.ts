@@ -24,6 +24,9 @@ export class Task {
   @Column()
   priority: string;
 
+  @Column({ nullable: true })
+  user_id: number;
+
   @ManyToOne(() => User, (user) => user.tasks, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;

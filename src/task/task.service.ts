@@ -52,7 +52,7 @@ export class TaskService {
   }
 
   async findOne(id: number): Promise<ResponseTaskDto | null> {
-    return await this.taskRepository.findOneBy({ id });
+    return await this.taskRepository.findOne({ where: { id } });
   }
 
   async update(

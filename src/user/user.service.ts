@@ -18,11 +18,14 @@ export class UserService {
   }
 
   async findAll(): Promise<ResponeUserDto[]> {
-    return await this.userRepository.find();
+    return await this.userRepository.find({ order: { id: 'ASC' } });
   }
 
   async findOne(id: number): Promise<ResponeUserDto | null> {
-    return await this.userRepository.findOneBy({ id });
+    return await this.userRepository.findOne({
+      where: { id },
+      order: { id: 'ASC' },
+    });
   }
 
   async update(

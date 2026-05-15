@@ -34,7 +34,7 @@ services:
       - .env
     environment:
       - NODE_ENV=development
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=${POSTGRES_HOST}
     ports:
       - '${PORT:-3001}:${PORT:-3001}'
     volumes:

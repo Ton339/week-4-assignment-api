@@ -296,7 +296,7 @@ const tasksData = [
 // 2. ตั้งค่า Connection Database (ใช้ค่าเดียวกับใน app.module.ts ของคุณ)
 const AppDataSource = new DataSource({
   type: 'postgres', // เปลี่ยนเป็น mysql หรือ sqlite ตามที่คุณใช้จริง
-  host: String(process.env.POSTGRES_HOST),
+  host: 'localhost',
   port: parseInt(process.env.POSTGRES_PORT || '5432'),
   username: String(process.env.POSTGRES_USER),
   password: String(process.env.POSTGRES_PASSWORD),
@@ -339,4 +339,4 @@ async function runSeed() {
   }
 }
 
-runSeed();
+void runSeed();

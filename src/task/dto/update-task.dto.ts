@@ -21,5 +21,5 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
 
   @IsNumber()
   @IsNotEmpty()
-  userId: number;
+  user_id: number;
 }
